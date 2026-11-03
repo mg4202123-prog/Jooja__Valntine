@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffdbe6">
+<title>Joja — A Valentine's Day Experience ❤️</title>
+<meta name="description" content="A little Valentine's Day experience made with love, for Joja.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;0,700;1,400;1,500;1,600&family=Great+Vibes&family=Noto+Sans+Math&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================================
+   JOJA — Valentine's Day Experience  ·  STYLES
+   ===================================================================== */
+:root{
+  --baby:#ffd9e4; --blush:#f9c6d4; --peach:#ffd8c2; --lav:#e3d6f5; --cream:#fff6ec; --warm:#fffaf5;
+  --rose:#d9577d; --rose-d:#a93560; --rose-dd:#7a2845; --gold:#d8b97f; --gold-d:#b9934f; --ink:#5e2f45;
+  --font-display:'Cormorant Garamond','Playfair Display',Georgia,serif;
+  --font-script:'Great Vibes','Brush Script MT',cursive;
+  --font-ar:'Alexandria','IBM Plex Sans Arabic','Segoe UI',Tahoma,Arial,sans-serif;
+  --font-ui:'Alexandria','Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
+  --ease:cubic-bezier(.22,.7,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden;background:#ffe6ec;overscroll-behavior:none}
+body{font-family:var(--font-ui);color:var(--ink);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;text-rendering:optimizeLegibility}
+button{font:inherit;color:inherit;cursor:pointer}
+img{max-width:100%}
+:focus-visible{outline:3px solid var(--rose-d);outline-offset:3px;border-radius:8px}
+
+#app{position:fixed;inset:0;height:100vh;height:100dvh;overflow:hidden}
+
+/* ---------- Backdrops (one per scene, cross-faded) ---------- */
+#backdrops,.bd{position:absolute;inset:0}
+.bd{opacity:0;transition:opacity 1.3s ease}
+.bd.on{opacity:1}
+.bd1{background:radial-gradient(60% 50% at 20% 15%,#fff 0,transparent 60%),radial-gradient(60% 60% at 85% 85%,#eadfff 0,transparent 65%),linear-gradient(160deg,#fff3ea,#ffdde6)}
+.bd2{background:radial-gradient(70% 50% at 50% 40%,#fff6ee,transparent 70%),linear-gradient(180deg,#ffd3e0,#ffe5d6)}
+.bd3{background:radial-gradient(60% 45% at 50% 35%,#fff,transparent 70%),linear-gradient(170deg,#ffe0ea,#f1e1fb 60%,#ffe6d6)}
+.bd4{background:radial-gradient(rgba(255,255,255,.55) 1.6px,transparent 2.2px) 0 0/24px 24px,radial-gradient(70% 60% at 50% 40%,#fff4ee,transparent 75%),linear-gradient(135deg,#f8d3dc,#fbe6d8)}
+.bd5{background:radial-gradient(70% 40% at 50% 0,#fff,transparent 70%),linear-gradient(180deg,#ffe4ec,#ffcddb)}
+.bd6{background:radial-gradient(60% 50% at 80% 20%,#fff1e6,transparent 70%),linear-gradient(160deg,#ffe3d1,#ffc7d8)}
+.bd7{background:radial-gradient(60% 45% at 50% 40%,#fff,transparent 70%),linear-gradient(170deg,#eadcff,#ffd9e8 60%,#ffe9f1)}
+.bd8{background:radial-gradient(70% 50% at 20% 20%,#fffaf0,transparent 70%),linear-gradient(160deg,#fff0dc,#ffdcd2 55%,#f8d3e2)}
+.bd9{background:radial-gradient(70% 55% at 50% 42%,#fffaf3,transparent 72%),linear-gradient(180deg,#ffd4e3,#ffe8ec 50%,#fff3df)}
+
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.32;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .6 0 0 0 0 .35 0 0 0 0 .4 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- Floating hearts ---------- */
+.hearts-layer{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
+.local-hearts{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.fh{position:absolute;bottom:-60px;opacity:0;animation:rise linear infinite;will-change:transform,opacity}
+.fh use{fill:currentColor}
+@keyframes rise{
+  0%{transform:translate3d(0,0,0) rotate(var(--r0,0deg));opacity:0}
+  8%{opacity:var(--o,.5)}
+  50%{transform:translate3d(var(--dx,60px),calc(var(--rise,-115vh)*.5),0) rotate(calc(var(--r0,0deg)*-.5))}
+  90%{opacity:var(--o,.5)}
+  100%{transform:translate3d(calc(var(--dx,60px)*-.6),var(--rise,-115vh),0) rotate(var(--r1,20deg));opacity:0}
+}
+
+/* ---------- Scenes ---------- */
+#stage{position:absolute;inset:0;z-index:2}
+.scene{position:absolute;inset:0;display:flex;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;
+  padding:calc(66px + env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) calc(26px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));
+  opacity:0;visibility:hidden;pointer-events:none;transform:var(--enter,scale(1.04));
+  transition:opacity .8s ease,transform .9s var(--ease),visibility 0s linear .95s}
+.scene.leaving{transform:var(--exit,scale(.97))}
+.scene.active{opacity:1;visibility:visible;pointer-events:auto;transform:none;will-change:opacity,transform;
+  transition:opacity .9s ease .2s,transform 1s var(--ease) .2s,visibility 0s}
+#s1{--enter:scale(1.08);--exit:scale(.94)}
+#s2{--enter:scale(.94);--exit:scale(1.08)}
+#s3{--enter:translate3d(0,50px,0);--exit:translate3d(0,-40px,0)}
+#s4{--enter:translate3d(0,70px,0) scale(.96);--exit:translate3d(0,-30px,0) scale(.97)}
+#s5{--enter:translate3d(0,46px,0);--exit:translate3d(0,-36px,0)}
+#s6{--enter:translate3d(60px,0,0);--exit:translate3d(-60px,0,0)}
+#s7{--enter:scale(1.06);--exit:scale(.96)}
+#s8{--enter:translate3d(-60px,0,0);--exit:translate3d(60px,0,0)}
+#s9{--enter:scale(.9);--exit:scale(1.05)}
+
+.wrap{margin:auto;width:100%;max-width:1000px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;position:relative;z-index:2}
+.px{position:absolute;inset:0;pointer-events:none;transform:translate3d(calc(var(--mx,0)*var(--d,10)*1px),calc(var(--my,0)*var(--d,10)*1px),0);transition:transform .5s ease-out}
+
+/* ---------- Typography helpers ---------- */
+.kicker,.eyebrow{font-family:var(--font-display);font-style:italic;font-size:1.05rem;letter-spacing:.18em;text-transform:uppercase;color:var(--rose-d);margin:0}
+.title{margin:0;line-height:1.1}
+.script{font-family:var(--font-script);font-weight:400;color:var(--rose);font-size:clamp(2.6rem,9vw,4.4rem);text-shadow:0 2px 0 rgba(255,255,255,.7),0 0 30px rgba(255,170,200,.6)}
+
+/* ---------- Buttons ---------- */
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:0 32px;border:0;border-radius:999px;
+  background:linear-gradient(135deg,#e0668f,#c24a74);color:#fff;font-weight:500;font-size:1.05rem;letter-spacing:.02em;
+  box-shadow:0 12px 24px -10px rgba(194,74,116,.7),inset 0 1px 0 rgba(255,255,255,.35);transition:transform .25s var(--ease),box-shadow .25s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 16px 28px -10px rgba(194,74,116,.75),inset 0 1px 0 rgba(255,255,255,.35)}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:rgba(255,255,255,.65);color:var(--rose-dd);border:1.5px solid rgba(194,74,116,.45);box-shadow:none;min-height:46px;padding:0 24px;font-size:.95rem}
+.btn.ghost:hover{background:#fff}
+.btn:disabled{cursor:default}
+
+/* ---------- Music button + toast ---------- */
+#music-btn{position:fixed;z-index:50;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));width:50px;height:50px;border-radius:50%;
+  border:1.5px solid rgba(194,74,116,.35);background:rgba(255,250,245,.85);display:grid;place-items:center;color:var(--rose-d);
+  box-shadow:0 8px 20px -8px rgba(194,74,116,.55);transition:transform .25s var(--ease),opacity .3s}
+#music-btn:hover{transform:scale(1.06)}
+#music-btn svg{width:22px;height:22px;fill:currentColor}
+#music-btn .eq{display:none;gap:3px;align-items:flex-end;height:20px}
+#music-btn .eq i{display:block;width:4px;height:100%;background:currentColor;border-radius:2px;transform-origin:bottom;animation:eq 1s ease-in-out infinite}
+#music-btn .eq i:nth-child(2){animation-delay:-.4s}#music-btn .eq i:nth-child(3){animation-delay:-.75s}
+#music-btn.is-playing .eq{display:flex}#music-btn.is-playing svg{display:none}
+#music-btn.unavailable{opacity:.55}
+@keyframes eq{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+#toast{position:fixed;z-index:60;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translate(-50%,20px);max-width:90vw;padding:12px 20px;border-radius:16px;
+  background:rgba(94,47,69,.92);color:#fff;font-size:.9rem;text-align:center;opacity:0;pointer-events:none;transition:opacity .4s,transform .4s var(--ease)}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- Decorative svg stickers ---------- */
+.deco{position:absolute;width:var(--s,40px);height:var(--s,40px);color:var(--c,#f6a5bd);pointer-events:none;filter:drop-shadow(0 3px 3px rgba(150,60,95,.18))}
+.deco.heart{height:calc(var(--s,40px)*.9)}
+.deco.spark{color:var(--gold);animation:twinkle 3.2s ease-in-out infinite;animation-delay:var(--dl,0s)}
+.sway{animation:swayDeco 5s ease-in-out infinite;animation-delay:var(--dl,0s)}
+@keyframes swayDeco{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(7deg)}}
+@keyframes twinkle{0%,100%{transform:scale(.5) rotate(0);opacity:.35}50%{transform:scale(1.1) rotate(45deg);opacity:1}}
+
+/* ---------- Photos / polaroids ---------- */
+.polaroid{position:relative;margin:0;background:#fffdf9;padding:12px 12px 12px;border-radius:4px;display:inline-flex;flex-direction:column;align-items:center;gap:8px;
+  transform:rotate(var(--rot,0deg));
+  box-shadow:0 20px 34px -14px rgba(150,60,95,.5),0 3px 8px rgba(150,60,95,.16)}
+.polaroid img{display:block;width:auto;height:auto;max-width:min(76vw,var(--pw,300px));max-height:var(--ph,44vh);background:#f6e7ea}
+.polaroid figcaption{font-family:var(--font-script);font-size:1.55rem;line-height:1.1;color:var(--rose);padding:2px 0 0}
+.photo-missing{width:min(62vw,230px);aspect-ratio:9/16;max-height:var(--ph,44vh);display:grid;place-content:center;gap:8px;text-align:center;padding:14px;
+  border:2px dashed #e29ab3;background:repeating-linear-gradient(45deg,#fff0f4 0 10px,#ffe4ec 10px 20px);color:var(--rose-dd);font-size:.85rem;word-break:break-all}
+.photo-missing strong{font-weight:600;font-size:.95rem}
+.tape{position:absolute;width:96px;height:28px;z-index:3;pointer-events:none;
+  background:repeating-linear-gradient(45deg,rgba(255,255,255,.5) 0 6px,transparent 6px 12px),var(--tc,rgba(246,166,190,.85));
+  box-shadow:0 2px 4px rgba(150,60,95,.15);clip-path:polygon(0 0,3% 20%,0 40%,3% 60%,0 80%,0 100%,100% 100%,97% 80%,100% 60%,97% 40%,100% 20%,100% 0)}
+.tape.lav{--tc:rgba(203,184,240,.85)}.tape.peach{--tc:rgba(255,202,168,.9)}.tape.gold{--tc:rgba(226,200,146,.9)}
+.pol-anim{animation:dropIn 1s var(--ease) .35s both}
+@keyframes dropIn{from{opacity:0;transform:translateY(-34px) rotate(calc(var(--rot,0deg) - 8deg))}to{opacity:1;transform:rotate(var(--rot,0deg))}}
+
+/* ---------- Reveal units (shared) ---------- */
+.msg{margin:0;font-family:var(--font-ar);line-height:2.05;color:var(--ink);font-size:clamp(1.02rem,3.9vw,1.3rem);overflow-wrap:break-word;max-width:100%}
+.unit{display:inline-block;opacity:0;transition:opacity .7s ease,transform .8s var(--ease)}
+.unit.is-in{opacity:1;transform:none}
+.is-skip .unit{transition-duration:.25s!important;transition-delay:0s!important}
+.u-word{transform:translateY(18px)}
+.u-word.is-in{animation:wordGlow 1.5s ease-out forwards}
+@keyframes wordGlow{0%{color:#ef5f8f;text-shadow:0 0 18px rgba(255,120,170,.9)}100%{color:var(--ink);text-shadow:0 0 0 rgba(255,120,170,0)}}
+.u-phrase{transform:translateY(12px) scale(.94)}
+.u-line{display:block;transform:translateY(22px);transition-duration:1.1s,1.2s}
+.u-sent{display:block;transform:translateY(12px);transition-duration:1s,1s}
+.u-part{transform:translateY(10px)}
+.em{color:var(--rose-d);font-weight:500;background:linear-gradient(transparent 58%,rgba(246,150,185,.6) 58%) right bottom/0% 100% no-repeat;transition:opacity .8s ease,transform .9s var(--ease),background-size 1.3s ease .35s!important;padding:0 .2em}
+.em.is-in{background-size:100% 100%;animation:emPulse 2.2s ease-out .4s 1}
+@keyframes emPulse{0%,100%{text-shadow:0 0 0 rgba(255,120,170,0)}40%{text-shadow:0 0 18px rgba(255,120,170,.85)}}
+
+.controls{display:grid;place-items:center;min-height:104px;width:100%}
+.controls>*{grid-area:1/1}
+.cont{display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease,visibility 0s .6s}
+.controls.done .cont{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+.controls.done .skip-btn{opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s}
+.cap{font-family:var(--font-display);font-style:italic;font-size:1.1rem;color:var(--rose-d);letter-spacing:.08em}
+
+/* =====================================================================
+   SCENE 1 — COUNTDOWN
+   ===================================================================== */
+.glow{position:absolute;pointer-events:none;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.95),rgba(255,190,215,.45) 55%,transparent 75%)}
+#s1 .g1{width:70vmax;height:50vmax;left:-20vmax;top:-12vmax;animation:drift1 14s ease-in-out infinite alternate}
+#s1 .g2{width:60vmax;height:44vmax;right:-22vmax;bottom:-14vmax;background:radial-gradient(closest-side,rgba(230,215,255,.9),rgba(255,214,190,.4) 60%,transparent 78%);animation:drift2 16s ease-in-out infinite alternate}
+#s1 .g3{width:40vmax;height:30vmax;left:30%;top:40%;opacity:.7;animation:drift1 11s ease-in-out infinite alternate-reverse}
+@keyframes drift1{from{transform:translate3d(0,0,0)}to{transform:translate3d(8vmax,6vmax,0)}}
+@keyframes drift2{from{transform:translate3d(0,0,0)}to{transform:translate3d(-9vmax,-5vmax,0)}}
+.stack{display:grid;place-items:center;width:100%;min-height:60vh}
+.stack>*{grid-area:1/1}
+.gate{display:flex;flex-direction:column;align-items:center;gap:16px;transition:opacity .8s ease,transform .8s var(--ease),visibility 0s}
+.gate-title{margin:4px 0 14px;font-family:var(--font-display);font-weight:500;font-size:clamp(2.2rem,8.5vw,4rem);line-height:1.1;color:var(--rose-dd)}
+.gate-title em{font-family:var(--font-script);font-style:normal;color:var(--rose);font-size:1.15em}
+.gate .btn{min-width:min(78vw,300px)}
+.gate.gone{opacity:0;visibility:hidden;transform:scale(.94);transition:opacity .7s ease,transform .7s ease,visibility 0s .7s;pointer-events:none}
+.count{text-align:center;opacity:0;visibility:hidden}
+.count.on{opacity:1;visibility:visible}
+.count-num{display:block;font-family:var(--font-display);font-weight:300;font-size:clamp(9rem,44vw,21rem);line-height:1;color:var(--rose);opacity:0;
+  text-shadow:0 0 36px rgba(255,150,190,.95),0 0 90px rgba(255,205,170,.9)}
+.count-num.tick{animation:numIn 1.25s var(--ease) both}
+@keyframes numIn{0%{opacity:0;transform:scale(.55)}30%{opacity:1;transform:scale(1)}75%{opacity:1;transform:scale(1.08)}100%{opacity:0;transform:scale(1.55)}}
+.count-cap{margin:0;font-family:var(--font-display);font-style:italic;font-size:1.25rem;letter-spacing:.2em;color:var(--rose-d);opacity:0}
+.count.on .count-cap{animation:fadeUp 1.2s ease .2s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:.9;transform:none}}
+
+/* =====================================================================
+   SCENE 2 — OPENING TYPOGRAPHY
+   ===================================================================== */
+.typo-glow{position:absolute;left:50%;top:50%;width:90vmin;height:70vmin;margin:-35vmin 0 0 -45vmin;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.95),rgba(255,176,205,.4) 60%,transparent 80%);animation:breathe 6s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(.94);opacity:.8}50%{transform:scale(1.06);opacity:1}}
+.typo-stack{margin:0;display:flex;flex-direction:column;align-items:center;gap:clamp(4px,1.6vh,16px);font-family:var(--font-display);font-weight:600;line-height:1}
+.hw{display:block;font-size:clamp(2.3rem,10.5vw,6.6rem);letter-spacing:.12em;padding-left:.12em;color:var(--rose);opacity:0;transition:opacity 1.1s ease,transform 1.3s var(--ease);
+  text-shadow:0 2px 0 rgba(255,255,255,.8),0 0 34px rgba(255,160,195,.8)}
+.hw1{transform:translateY(-34px)}
+.hw2{transform:scale(1.14);color:var(--rose-d);font-size:clamp(2rem,9.2vw,6rem)}
+.hw3{transform:translateX(-46px);color:var(--gold-d)}
+.hw4{transform:translateY(34px) scale(.9);font-size:clamp(2.7rem,12vw,7.4rem);color:var(--rose-dd)}
+.hw.in{opacity:1;transform:none}
+.hw4 .heart-e{display:inline-block;animation:beat 1.4s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}20%{transform:scale(1.2)}40%{transform:scale(1)}60%{transform:scale(1.12)}}
+.hw4.in{background:linear-gradient(100deg,var(--rose-dd) 30%,#f2a3bf 45%,var(--gold) 50%,#f2a3bf 55%,var(--rose-dd) 70%) 0 0/250% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:none;animation:shine 3.2s ease-in-out .6s 2 both}
+.hw4.in .heart-e{-webkit-text-fill-color:initial}
+@keyframes shine{from{background-position:120% 0}to{background-position:-60% 0}}
+
+  /* =====================================================================
+   SCENE 3 — CAT & GUITAR
+   ===================================================================== */
+.cat-word{font-family:var(--font-display);font-weight:700;font-size:clamp(2.2rem,10vw,4.6rem);letter-spacing:.3em;padding-left:.3em;line-height:1;color:var(--rose);margin:0;text-shadow:0 2px 0 rgba(255,255,255,.85),0 0 28px rgba(255,160,195,.7);opacity:0}
+#s3.active .cat-word.top{animation:fadeDown 1s var(--ease) .5s both}
+#s3.active .cat-word.bottom{animation:fadeUp2 1s var(--ease) 1s both}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:none}}
+@keyframes fadeUp2{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.cat-stage{position:relative;display:inline-block}
+.cat-svg{display:block;height:min(42vh,340px);width:auto;max-width:78vw;overflow:visible}
+#s3.active .cat-svg{animation:catIn 1.1s var(--ease) .3s both}
+@keyframes catIn{from{opacity:0;transform:translateY(30px) scale(.9)}to{opacity:1;transform:none}}
+.cat-float{animation:floaty 4s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.cat-head{transform-origin:150px 178px;animation:headbob 2.6s ease-in-out infinite}
+@keyframes headbob{0%,100%{transform:rotate(-2.2deg)}50%{transform:rotate(2.6deg) translateY(1px)}}
+.cat-tail{transform-origin:212px 286px;animation:tail 2.2s ease-in-out infinite}
+@keyframes tail{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(9deg)}}
+.cat-body{transform-origin:150px 310px;animation:bodyBreathe 3s ease-in-out infinite}
+@keyframes bodyBreathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.018)}}
+.ear-r{transform-origin:200px 100px;animation:twitch 5s ease-in-out infinite}
+@keyframes twitch{0%,86%,100%{transform:rotate(0)}90%{transform:rotate(-7deg)}94%{transform:rotate(3deg)}}
+.guitar-sway{transform-origin:146px 256px;animation:gsway 2.6s ease-in-out infinite}
+@keyframes gsway{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(1.6deg)}}
+.strum-arm{transform-origin:202px 198px;animation:strum .55s ease-in-out infinite alternate}
+@keyframes strum{from{transform:rotate(-6deg)}to{transform:rotate(7deg)}}
+.strings{animation:vibe .1s linear infinite alternate}
+@keyframes vibe{from{transform:translateX(-.5px)}to{transform:translateX(.5px)}}
+.note{position:absolute;font-family:var(--font-display);font-weight:700;color:var(--rose);opacity:0;animation:noteUp 4.2s ease-out infinite;pointer-events:none;text-shadow:0 0 12px rgba(255,255,255,.9)}
+@keyframes noteUp{0%{opacity:0;transform:translate3d(0,0,0) rotate(-8deg) scale(.7)}15%{opacity:.95}100%{opacity:0;transform:translate3d(var(--nx,-20px),-120px,0) rotate(14deg) scale(1.15)}}
+.cat-cta{min-height:60px;opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .8s ease,transform .8s ease,visibility 0s .8s}
+.cat-cta.show{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+
+/* =====================================================================
+   SCENE 4 — SCRAPBOOK
+   ===================================================================== */
+.book{perspective:1600px;align-items:center;gap:20px}
+.cover{position:relative;width:min(86vw,400px);aspect-ratio:4/5;border:0;padding:0;border-radius:10px 22px 22px 10px;color:var(--ink);
+  background:radial-gradient(rgba(216,150,120,.18) 1.2px,transparent 1.8px) 0 0/16px 16px,linear-gradient(145deg,#fbe9d6,#f6d6c4);
+  box-shadow:0 30px 50px -22px rgba(150,60,95,.55),0 4px 10px rgba(150,60,95,.18),inset -8px 0 14px -8px rgba(150,70,60,.25);
+  transform-origin:left center;animation:coverIdle 4.5s ease-in-out infinite;transition:transform .3s var(--ease)}
+.cover::before{content:"";position:absolute;inset:14px;border:2px dashed rgba(201,80,122,.55);border-radius:6px 16px 16px 6px;pointer-events:none}
+.cover::after{content:"";position:absolute;left:0;top:0;bottom:0;width:22px;background:linear-gradient(90deg,rgba(150,70,60,.22),transparent);border-radius:10px 0 0 10px}
+.cover:hover{transform:rotate(-1deg) scale(1.02)}
+@keyframes coverIdle{0%,100%{transform:translateY(0) rotate(-.6deg)}50%{transform:translateY(-6px) rotate(.6deg)}}
+.cover .tape{top:-10px;left:50%;margin-left:-48px;transform:rotate(-4deg)}
+.cover .tape.b{top:auto;bottom:14px;left:auto;right:-18px;margin:0;transform:rotate(-38deg);width:84px}
+.cover-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:0 34px}
+.cover-kicker{font-family:var(--font-display);font-style:italic;font-size:1.15rem;letter-spacing:.2em;text-transform:uppercase;color:var(--rose-d)}
+.cover-title{font-family:var(--font-script);font-size:clamp(2.8rem,13vw,4.4rem);line-height:1;color:var(--rose);text-shadow:0 2px 0 rgba(255,255,255,.7)}
+.cover-line{width:70px;height:2px;background:linear-gradient(90deg,transparent,var(--gold-d),transparent)}
+.cover-hint{display:inline-flex;align-items:center;min-height:44px;padding:0 20px;border-radius:999px;background:#fff;border:1.5px solid rgba(194,74,116,.4);color:var(--rose-dd);font-weight:500;font-size:.95rem;animation:hintPulse 2s ease-in-out infinite}
+@keyframes hintPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.book.opening .cover{animation:coverOpen .7s cubic-bezier(.5,0,.8,.4) forwards}
+@keyframes coverOpen{to{transform:perspective(1200px) rotateY(-84deg) scale(.96);opacity:0}}
+.book.open .cover{display:none}
+
+.spread{display:none;position:relative;width:min(94vw,960px);grid-template-columns:1fr 1fr;align-items:stretch}
+.book.opening .spread{display:none}
+.book.open .spread{display:grid}
+.spread::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:44px;margin-left:-22px;pointer-events:none;z-index:4;background:linear-gradient(90deg,transparent,rgba(120,50,70,.14),transparent)}
+.page{position:relative;padding:34px 26px;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  box-shadow:0 26px 44px -22px rgba(150,60,95,.5),0 3px 8px rgba(150,60,95,.15)}
+.page-l{border-radius:22px 4px 4px 22px;transform-origin:right center;
+  background:radial-gradient(rgba(240,130,165,.28) 2.4px,transparent 3px) 0 0/22px 22px,linear-gradient(160deg,#ffe9ef,#ffdbe6)}
+.page-r{border-radius:4px 22px 22px 4px;transform-origin:left center;
+  background:radial-gradient(70% 50% at 100% 0,#fffdf7,transparent),linear-gradient(160deg,#fff9ef,#fff0e0)}
+.book.open .page-l{animation:unfoldL .95s var(--ease) both}
+.book.open .page-r{animation:unfoldR .95s var(--ease) .08s both}
+@keyframes unfoldL{from{transform:perspective(1400px) rotateY(92deg);opacity:0}to{transform:perspective(1400px) rotateY(0);opacity:1}}
+@keyframes unfoldR{from{transform:perspective(1400px) rotateY(-92deg);opacity:0}to{transform:perspective(1400px) rotateY(0);opacity:1}}
+.book.closing .page-l{animation:foldL .7s cubic-bezier(.5,0,.8,.4) both}
+.book.closing .page-r{animation:foldR .7s cubic-bezier(.5,0,.8,.4) both}
+@keyframes foldL{from{transform:perspective(1400px) rotateY(0);opacity:1}to{transform:perspective(1400px) rotateY(92deg);opacity:0}}
+@keyframes foldR{from{transform:perspective(1400px) rotateY(0);opacity:1}to{transform:perspective(1400px) rotateY(-92deg);opacity:0}}
+.page-l .polaroid{--rot:-3deg;--ph:50vh;--pw:300px}
+.page-l .polaroid .tape{top:-14px;left:50%;margin-left:-48px;transform:rotate(3deg)}
+.arabic{font-family:var(--font-ar);direction:rtl;text-align:right;font-size:clamp(.98rem,2.5vw,1.08rem);line-height:2.05;margin:0 0 .5em;color:var(--ink);overflow-wrap:break-word}
+.arabic.sign{font-weight:500;color:var(--rose-d)}
+.page-r .arabic:last-of-type{margin-bottom:0}
+.book.open .page-r .arabic{animation:fadeUp 1s ease both}
+.book.open .page-r .arabic:nth-of-type(1){animation-delay:.7s}.book.open .page-r .arabic:nth-of-type(2){animation-delay:1.1s}
+.book.open .page-r .arabic:nth-of-type(3){animation-delay:1.3s}.book.open .page-r .arabic:nth-of-type(4){animation-delay:1.5s}
+#close-book{display:none}
+.book.open #close-book{display:inline-flex;animation:fadeUp 1s ease 1.2s both}
+.book.closing #close-book{display:none}
+
+/* =====================================================================
+   SCENE 5 — SMILE
+   ===================================================================== */
+.smile .polaroid{--rot:-3deg;--ph:min(40vh,420px)}
+.smile .polaroid .tape{top:-14px;left:50%;margin-left:-48px;transform:rotate(-4deg)}
+.smile .msg{max-width:640px;text-align:center;font-size:clamp(1.08rem,4.2vw,1.4rem)}
+
+/* =====================================================================
+   SCENE 6 — SWEET GIRL
+   ===================================================================== */
+.sweet-grid{display:grid;gap:28px;align-items:center;justify-items:center;width:100%}
+.sweet-photo{position:relative;margin:0;padding:9px;background:#fff;border-radius:30px;box-shadow:0 22px 38px -16px rgba(190,70,110,.55);--rot:2.5deg;transform:rotate(var(--rot))}
+.sweet-photo img{display:block;width:auto;height:auto;max-width:min(76vw,300px);max-height:min(40vh,430px);border-radius:22px;background:#ffe0ea}
+.sweet-photo .photo-missing{border-radius:22px}
+.pink-card{position:relative;max-width:520px;width:100%;padding:34px 26px;border-radius:30px;background:linear-gradient(160deg,#ffc9d9,#ffaec6);border:3px solid rgba(255,255,255,.75);
+  box-shadow:0 24px 40px -18px rgba(190,60,100,.6),inset 0 0 0 1px rgba(255,255,255,.4)}
+.pink-card::before{content:"";position:absolute;inset:9px;border:2px dashed rgba(255,255,255,.9);border-radius:22px;pointer-events:none}
+.pink-card .msg{color:var(--rose-dd);text-align:center;position:relative;font-size:clamp(1.12rem,4.4vw,1.45rem);line-height:2.1}
+.pink-card .u-phrase{margin:0 .12em}
+
+/* =====================================================================
+   SCENE 7 — BEST THING
+   ===================================================================== */
+.best-title{font-family:var(--font-display);font-style:italic;font-weight:500;font-size:clamp(2rem,8vw,3.6rem);line-height:1.1;color:var(--rose-dd);margin:0;max-width:760px}
+.best-photo{position:relative;margin:10px 0;padding:8px;border-radius:24px;background:rgba(255,255,255,.75);border:1px solid var(--gold)}
+.best-photo::before{content:"";position:absolute;inset:-16%;z-index:-1;background:radial-gradient(closest-side,rgba(255,255,255,.95),rgba(224,200,255,.55) 55%,transparent 75%);animation:breathe 6s ease-in-out infinite}
+.best-photo img{display:block;width:auto;height:auto;max-width:min(80vw,320px);max-height:min(38vh,420px);border-radius:17px;background:#f1e4ff}
+.best-photo .photo-missing{border-radius:17px}
+#s7.active .best-photo{animation:zoomSoft 1.4s var(--ease) .3s both}
+@keyframes zoomSoft{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:none}}
+.best-msg{max-width:620px;text-align:center;font-size:clamp(1.1rem,4.3vw,1.42rem);line-height:2.1}
+
+/* =====================================================================
+   SCENE 8 — ALEXANDRIA
+   ===================================================================== */
+.alex-title{font-family:var(--font-display);font-weight:600;font-size:clamp(1.7rem,6.6vw,3rem);letter-spacing:.06em;color:var(--rose-dd);margin:0}
+.alex-grid{display:grid;gap:32px;width:100%;align-items:center;justify-items:center}
+.mem-frame{position:relative;padding:14px;border-radius:6px;background:linear-gradient(135deg,#f6e8c4,#d8b97f 45%,#f3deaa 70%,#c9a46a);box-shadow:0 24px 40px -18px rgba(140,90,40,.55);transform:rotate(-2deg)}
+.mem-mat{background:#fffaf0;padding:12px 12px 10px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.mem-mat img{display:block;width:auto;height:auto;max-width:min(72vw,300px);max-height:min(40vh,420px);background:#fff0e0}
+.mem-mat figcaption{font-family:var(--font-display);font-style:italic;font-size:1rem;letter-spacing:.14em;color:var(--gold-d);text-transform:uppercase}
+.mem-frame .corner{position:absolute;width:20px;height:18px;color:var(--rose)}
+.letter{position:relative;width:100%;max-width:520px;padding:36px 26px 46px;background:radial-gradient(70% 50% at 100% 0,#fffefa,transparent),linear-gradient(165deg,#fffaf0,#fdeedd);
+  border-radius:4px;box-shadow:0 24px 40px -18px rgba(140,90,60,.5),0 2px 6px rgba(140,90,60,.15);transform:rotate(1deg);text-align:right}
+.letter::before{content:"";position:absolute;inset:10px;border:1px solid rgba(216,185,127,.7);pointer-events:none}
+.postmark{position:absolute;top:14px;left:16px;padding:4px 10px;border:1.5px dashed var(--rose);color:var(--rose);font-family:var(--font-display);font-weight:700;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;transform:rotate(-6deg);opacity:.85;background:rgba(255,255,255,.5)}
+.letter .msg{text-align:right;direction:rtl;margin-top:30px;font-size:clamp(1.08rem,4.2vw,1.35rem);line-height:2.15}
+.letter .u-sent{margin:0 0 .3em}
+.seal{position:absolute;left:50%;bottom:-18px;width:44px;height:44px;margin-left:-22px;color:#d9577d}
+
+/* =====================================================================
+   SCENE 9 — FINAL
+   ===================================================================== */
+.big-glow{position:absolute;border-radius:50%;pointer-events:none}
+.big-glow.a{width:110vmin;height:90vmin;left:50%;top:50%;margin:-45vmin 0 0 -55vmin;background:radial-gradient(closest-side,rgba(255,255,255,.95),rgba(255,184,210,.45) 55%,transparent 78%);animation:breathe 7s ease-in-out infinite}
+.big-glow.b{width:60vmin;height:50vmin;left:-10vmin;bottom:-8vmin;background:radial-gradient(closest-side,rgba(255,226,170,.65),transparent 75%);animation:drift1 12s ease-in-out infinite alternate}
+.big-glow.c{width:56vmin;height:48vmin;right:-10vmin;top:-6vmin;background:radial-gradient(closest-side,rgba(226,210,255,.8),transparent 75%);animation:drift2 13s ease-in-out infinite alternate}
+.final-kicker{font-family:var(--font-display);font-style:italic;font-weight:500;font-size:clamp(1.2rem,4.4vw,1.8rem);letter-spacing:.12em;color:var(--rose-d);margin:0;opacity:0;transform:translateY(12px);transition:opacity 1.2s ease .3s,transform 1.2s var(--ease) .3s}
+.final-name{margin:6px 0;white-space:nowrap;font-family:'Noto Sans Math','Cambria Math','STIX Two Math',var(--font-display),serif;font-weight:400;font-size:clamp(3rem,11.5vw,8.5rem);line-height:1.15;color:var(--rose);display:flex;justify-content:center}
+.ch{display:inline-block;opacity:0;transform:translateY(30px) scale(.8);transition:opacity 1s ease,transform 1.2s var(--ease);transition-delay:calc(var(--i)*.14s + .9s)}
+.ch.math{background:linear-gradient(180deg,#e9648f 20%,#c9507a 60%,var(--gold-d));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 4px 14px rgba(255,150,190,.7))}
+.divider{display:flex;align-items:center;gap:12px;width:min(70vw,320px);opacity:0;transition:opacity 1.2s ease 2.4s}
+.divider::before,.divider::after{content:"";flex:1;height:1.5px;background:linear-gradient(90deg,transparent,var(--gold-d))}
+.divider::after{transform:scaleX(-1)}
+.divider svg{width:20px;height:18px;color:var(--rose)}
+.final-sub{margin:0;font-family:var(--font-display);font-style:italic;font-size:clamp(1.15rem,4vw,1.6rem);color:var(--rose-dd);opacity:0;transition:opacity 1.2s ease 2.7s}
+#replay{opacity:0;visibility:hidden;transition:opacity 1s ease 3.4s,visibility 0s 3.4s;margin-top:10px}
+.final.show .final-kicker{opacity:1;transform:none}
+.final.show .ch{opacity:1;transform:none}
+.final.show .divider,.final.show .final-sub{opacity:1}
+.final.show #replay{opacity:1;visibility:visible}
+.final.show .final-name{animation:nameFloat 5s ease-in-out 3s infinite}
+@keyframes nameFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* =====================================================================
+   RESPONSIVE
+   ===================================================================== */
+@media (min-width:860px){
+  .sweet-grid{grid-template-columns:auto minmax(0,520px);gap:48px}
+  .alex-grid{grid-template-columns:auto minmax(0,520px);gap:56px}
+  .polaroid img{max-width:var(--pw,300px)}
+}
+@media (max-width:760px){
+  .spread{grid-template-columns:1fr;gap:12px}
+  .spread::after{display:none}
+  .page{padding:30px 20px}
+  .page-l{border-radius:20px;transform-origin:top center}
+  .page-r{border-radius:20px;transform-origin:top center}
+  .page-l .polaroid{--ph:36vh}
+  .book.open .page-l{animation-name:unfoldV}
+  .book.open .page-r{animation-name:unfoldV}
+  .book.closing .page-l,.book.closing .page-r{animation-name:foldV}
+  @keyframes unfoldV{from{transform:perspective(900px) rotateX(-75deg) translateY(-16px);opacity:0}to{transform:perspective(900px) rotateX(0);opacity:1}}
+  @keyframes foldV{from{transform:perspective(900px) rotateX(0);opacity:1}to{transform:perspective(900px) rotateX(-75deg) translateY(-16px);opacity:0}}
+  .cat-svg{height:min(38vh,320px)}
+}
+@media (max-height:640px){
+  .scene{padding-top:calc(60px + env(safe-area-inset-top))}
+  .wrap{gap:12px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;animation-delay:0s!important;transition-duration:.2s!important;transition-delay:0s!important;scroll-behavior:auto!important}
+  .hearts-layer,.local-hearts,.note{display:none!important}
+  .count-num.tick{animation:none!important;opacity:1!important;transform:none!important}
+  .ch{transition-delay:0s!important}
+}
+</style>
+</head>
+
+  <body>
+<!-- Shared SVG symbols -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-heart" viewBox="0 0 32 29"><path fill="currentColor" d="M16 29C3 19 0 13 0 8.500 0 3.500 4 0 8.500 0 11.500 0 14.500 1.700 16 4.500 17.500 1.700 20.500 0 23.500 0 28 0 32 3.500 32 8.500 32 13 29 19 16 29Z"/></symbol>
+    <symbol id="i-flower" viewBox="0 0 60 60">
+      <g fill="currentColor" stroke="rgba(255,255,255,.55)" stroke-width="1">
+        <ellipse cx="30" cy="14" rx="10" ry="14"/><ellipse cx="30" cy="14" rx="10" ry="14" transform="rotate(72 30 30)"/>
+        <ellipse cx="30" cy="14" rx="10" ry="14" transform="rotate(144 30 30)"/><ellipse cx="30" cy="14" rx="10" ry="14" transform="rotate(216 30 30)"/>
+        <ellipse cx="30" cy="14" rx="10" ry="14" transform="rotate(288 30 30)"/>
+      </g>
+      <circle cx="30" cy="30" r="8" fill="#ffe9a8"/><circle cx="30" cy="30" r="3.500" fill="#f0c36d"/>
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 20 20"><path fill="currentColor" d="M10 0C11 6 14 9 20 10 14 11 11 14 10 20 9 14 6 11 0 10 6 9 9 6 10 0Z"/></symbol>
+  </defs>
+</svg>
+
+<div id="app">
+  <div id="backdrops" aria-hidden="true">
+    <div class="bd bd1"></div><div class="bd bd2"></div><div class="bd bd3"></div><div class="bd bd4"></div><div class="bd bd5"></div>
+    <div class="bd bd6"></div><div class="bd bd7"></div><div class="bd bd8"></div><div class="bd bd9"></div>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+  <div id="hearts-layer" class="hearts-layer" aria-hidden="true"></div>
+
+  <main id="stage">
+
+    <!-- ============ SCENE 1 — COUNTDOWN ============ -->
+    <section class="scene" id="s1" aria-label="Countdown">
+      <div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div>
+      <div class="wrap">
+        <div class="stack">
+          <div class="gate" id="gate">
+            <p class="eyebrow">For Joja</p>
+            <h1 class="gate-title">A little something<br>made with <em>love</em></h1>
+            <button class="btn" id="begin-music" type="button">Begin with music ♪</button>
+            <button class="btn ghost" id="begin-silent" type="button">Begin without sound</button>
+          </div>
+          <div class="count" id="count" aria-live="polite">
+            <span class="count-num" id="count-num"></span>
+            <p class="count-cap">get ready, my love</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCENE 2 — OPENING TYPOGRAPHY ============ -->
+    <section class="scene" id="s2" aria-label="Happy Valentine's Day Joja" data-parallax>
+      <div class="px" style="--d:-16"><div class="typo-glow"></div></div>
+      <div class="local-hearts" aria-hidden="true"></div>
+      <div class="wrap">
+        <h2 class="typo-stack" aria-label="Happy Valentine's Day Joja ❤️">
+          <span class="hw hw1" aria-hidden="true">HAPPY</span>
+          <span class="hw hw2" aria-hidden="true">VALENTINE'S</span>
+          <span class="hw hw3" aria-hidden="true">DAY</span>
+          <span class="hw hw4" aria-hidden="true">JOJA <span class="heart-e">❤️</span></span>
+        </h2>
+      </div>
+    </section>
+
+    <!-- ============ SCENE 3 — CAT & GUITAR ============ -->
+    <section class="scene" id="s3" aria-label="A cat playing guitar" data-parallax>
+      <div class="px" style="--d:-14"><div class="typo-glow" style="opacity:.8"></div></div>
+      <div class="local-hearts" aria-hidden="true"></div>
+      <div class="wrap">
+        <p class="cat-word top">HAPPY</p>
+        <div class="cat-stage">
+          <svg class="cat-svg" viewBox="0 0 300 330" role="img" aria-label="An animated cat playing a guitar">
+            <defs>
+              <linearGradient id="gFur" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd9b8"/><stop offset="1" stop-color="#f4b98d"/></linearGradient>
+              <linearGradient id="gWood" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3c892"/><stop offset="1" stop-color="#d8956a"/></linearGradient>
+            </defs>
+            <ellipse cx="150" cy="318" rx="94" ry="9" fill="#d98aa6" opacity=".28"/>
+            <g class="cat-float">
+              <g class="cat-tail">
+                <path d="M212 286C266 292 286 244 268 206" stroke="#f4b98d" stroke-width="20" stroke-linecap="round" fill="none"/>
+                <path d="M212 286C266 292 286 244 268 206" stroke="#e39d72" stroke-width="20" fill="none" stroke-dasharray="7 24" opacity=".55"/>
+              </g>
+              <g class="cat-body">
+                <ellipse cx="150" cy="240" rx="70" ry="74" fill="url(#gFur)"/>
+                <ellipse cx="150" cy="252" rx="40" ry="52" fill="#fff3e6"/>
+                <ellipse cx="116" cy="308" rx="24" ry="11" fill="#f8c49b"/><ellipse cx="184" cy="308" rx="24" ry="11" fill="#f8c49b"/>
+                <path d="M108 190Q150 214 192 190" stroke="#ff8fb0" stroke-width="8" stroke-linecap="round" fill="none"/>
+                <circle cx="150" cy="206" r="6" fill="#f3d08a" stroke="#d3a95d" stroke-width="1.500"/>
+              </g>
+              <g class="cat-head">
+                <path d="M92 104C88 76 88 58 96 50 106 52 124 66 134 82Z" fill="url(#gFur)"/>
+                <path d="M99 94C97 78 98 66 102 60 110 63 120 72 126 82Z" fill="#ffb3c6"/>
+                <g class="ear-r">
+                  <path d="M208 104C212 76 212 58 204 50 194 52 176 66 166 82Z" fill="url(#gFur)"/>
+                  <path d="M201 94C203 78 202 66 198 60 190 63 180 72 174 82Z" fill="#ffb3c6"/>
+                  <path d="M196 78L176 66Q172 78 176 90Z" fill="#ff8fb0"/><path d="M196 78L216 66Q220 78 216 90Z" fill="#ff8fb0"/><circle cx="196" cy="78" r="5.500" fill="#e0527f"/>
+                </g>
+                <ellipse cx="150" cy="128" rx="64" ry="54" fill="url(#gFur)"/>
+                <path d="M150 76V92M136 78L139 91M164 78L161 91" stroke="#e39d72" stroke-width="4" stroke-linecap="round" fill="none"/>
+                <ellipse cx="150" cy="148" rx="27" ry="18" fill="#fff3e6"/>
+                <path d="M118 126Q127 113 136 126M164 126Q173 113 182 126" stroke="#5a3340" stroke-width="4.500" stroke-linecap="round" fill="none"/>
+                <ellipse cx="110" cy="144" rx="11" ry="7" fill="#ff9db8" opacity=".6"/><ellipse cx="190" cy="144" rx="11" ry="7" fill="#ff9db8" opacity=".6"/>
+                <path d="M144 139Q150 136 156 139Q150 148 144 139Z" fill="#f2788f"/>
+                <path d="M150 147Q150 153 144 154M150 147Q150 153 156 154" stroke="#5a3340" stroke-width="2.600" stroke-linecap="round" fill="none"/>
+                <path d="M96 146L70 140M96 152L68 154M204 146L230 140M204 152L232 154" stroke="#c88f73" stroke-width="2" stroke-linecap="round" opacity=".85"/>
+              </g>
+              <g class="guitar-sway">
+                <g transform="translate(146 256) rotate(-58)">
+                  <rect x="-6" y="-128" width="12" height="98" rx="2" fill="#7b4a33"/>
+                  <rect x="-4.500" y="-120" width="9" height="86" fill="#5e3626"/>
+                  <path d="M-4.500 -100H4.500M-4.500 -84H4.500M-4.500 -68H4.500M-4.500 -52H4.500" stroke="#d9b38c" stroke-width="1.400"/>
+                  <rect x="-9" y="-152" width="18" height="28" rx="4" fill="#7b4a33"/>
+                  <g fill="#f3d7a8"><circle cx="-12" cy="-146" r="3.200"/><circle cx="-12" cy="-134" r="3.200"/><circle cx="12" cy="-146" r="3.200"/><circle cx="12" cy="-134" r="3.200"/></g>
+                  <g stroke="#b9784f" stroke-width="3.500"><ellipse cx="0" cy="30" rx="50" ry="42" fill="#d8956a"/><ellipse cx="0" cy="-12" rx="36" ry="30" fill="#d8956a"/></g>
+                  <ellipse cx="0" cy="30" rx="50" ry="42" fill="url(#gWood)"/><ellipse cx="0" cy="-12" rx="36" ry="30" fill="url(#gWood)"/>
+                  <circle cx="0" cy="8" r="16" fill="none" stroke="#f6dcae" stroke-width="2"/><circle cx="0" cy="8" r="13" fill="#5a3224"/>
+                  <rect x="-16" y="46" width="32" height="7" rx="3" fill="#7b4a33"/>
+                  <use href="#i-heart" x="-40" y="30" width="15" height="14" style="color:#f48fb1"/>
+                  <g class="strings" stroke="#fff6e8" stroke-width=".9"><path d="M-3 -126V49M0 -126V49M3 -126V49"/></g>
+                </g>
+              </g>
+              <path d="M100 192Q84 196 76 213" stroke="#f8c49b" stroke-width="22" stroke-linecap="round" fill="none"/>
+              <circle cx="75" cy="214" r="11.500" fill="#f8c49b"/>
+              <g class="strum-arm">
+                <path d="M202 196Q216 232 176 252" stroke="#f8c49b" stroke-width="22" stroke-linecap="round" fill="none"/>
+                <circle cx="172" cy="254" r="12" fill="#f8c49b"/>
+                <path d="M168 258V264M175 259V265" stroke="#e39d72" stroke-width="1.800" stroke-linecap="round"/>
+              </g>
+            </g>
+          </svg>
+          <span class="note" style="left:2%;top:46%;font-size:1.9rem;--nx:-30px">♪</span>
+          <span class="note" style="left:12%;top:34%;font-size:1.5rem;--nx:-10px;animation-delay:1.3s">♫</span>
+          <span class="note" style="right:6%;top:40%;font-size:1.7rem;--nx:26px;animation-delay:2.4s">♪</span>
+        </div>
+        <p class="cat-word bottom">VALENTINE</p>
+        <div class="cat-cta" id="cat-cta"><button class="btn" id="to-scrapbook" type="button">Open our memories ❤️</button></div>
+      </div>
+    </section>
+
+    <!-- ============ SCENE 4 — SCRAPBOOK ============ -->
+    <section class="scene" id="s4" aria-label="Interactive scrapbook">
+      <div class="local-hearts" aria-hidden="true"></div>
+      <div class="wrap book" id="book">
+        <button class="cover" id="cover" type="button" aria-expanded="false" aria-controls="spread" aria-label="Open the scrapbook">
+          <span class="tape"></span><span class="tape lav b"></span>
+          <svg class="deco sway" style="--s:54px;--c:#f6a5bd;left:-16px;top:22%" aria-hidden="true"><use href="#i-flower"/></svg>
+          <svg class="deco heart" style="--s:38px;--c:#e86f95;right:-12px;top:14%;transform:rotate(14deg)" aria-hidden="true"><use href="#i-heart"/></svg>
+          <svg class="deco sway" style="--s:44px;--c:#cdb7f0;left:12%;bottom:-14px;--dl:-2s" aria-hidden="true"><use href="#i-flower"/></svg>
+          <svg class="deco spark" style="--s:24px;right:16%;bottom:20%" aria-hidden="true"><use href="#i-spark"/></svg>
+          <span class="cover-inner">
+            <span class="cover-kicker">Joja &amp; me</span>
+            <span class="cover-title">Our little scrapbook</span>
+            <span class="cover-line"></span>
+            <span class="cover-hint">Tap to open ♡</span>
+          </span>
+        </button>
+
+        <div class="spread" id="spread">
+          <article class="page page-l" aria-label="Photo page">
+            <svg class="deco sway" style="--s:50px;--c:#f6a5bd;left:8px;bottom:10px" aria-hidden="true"><use href="#i-flower"/></svg>
+            <svg class="deco heart" style="--s:30px;--c:#e86f95;right:14px;top:16px;transform:rotate(12deg)" aria-hidden="true"><use href="#i-heart"/></svg>
+            <svg class="deco spark" style="--s:20px;left:18px;top:26px" aria-hidden="true"><use href="#i-spark"/></svg>
+            <figure class="polaroid">
+              <span class="tape"></span>
+              <img src="photo1.jpg" alt="Our two hands held together" decoding="async">
+              <figcaption>Us ♡</figcaption>
+            </figure>
+          </article>
+          <article class="page page-r" aria-label="Message page" lang="ar">
+            <svg class="deco sway" style="--s:46px;--c:#cdb7f0;right:10px;bottom:8px;--dl:-1.5s" aria-hidden="true"><use href="#i-flower"/></svg>
+            <svg class="deco heart" style="--s:26px;--c:#f08fae;left:16px;top:14px" aria-hidden="true"><use href="#i-heart"/></svg>
+            <p class="arabic" dir="rtl">بصي ب مناسبه اليوم الحلو ده عايز اقولك ان انا بحبك اوي خالص يا احلى جوجا ف الدنيا كلها رغم كل المشاكل اللي بتحصل بس اهم حاجة ان احنا بنفضل كويسين وبنحاول نصلح دايما بصي انا بحبك جدا جدا جدا وعارف اني مقصر معاكي ف حاجات كتير اوي بس بحاول دايما يعني مكنش كده يارب يكون الموقع عجبك يارب وتكوني فرحانه بي ده أهم حاجه عندي وبجد انا بحبك اوي وبموت فيكي ونفسي نكمل بقيت عمرنا مع بعض يارب لحد ما نكون ف بيت واحد انشاءلله ربنا يخليكي ليا يا احلى حاجه ف حياتي ❤️❤️❤️❤️</p>
+            <p class="arabic sign" dir="rtl">Love you joja💋❤️</p>
+            <p class="arabic sign" dir="rtl">❤️❤️❤️❤️💋💋💓</p>
+            <p class="arabic sign" dir="rtl">Happy Valentine day Joja❤️❤️</p>
+          </article>
+        </div>
+        <button class="btn ghost" id="close-book" type="button">Close the scrapbook ✕</button>
+      </div>
+    </section>
+
+    <!-- ============ SCENE 5 — YOUR BEAUTIFUL SMILE ============ -->
+    <section class="scene" id="s5" aria-label="Your Beautiful Smile">
+      <div class="local-hearts" aria-hidden="true"></div>
+      <div class="wrap smile">
+        <header>
+          <p class="kicker">Chapter one</p>
+          <h2 class="title script">Your Beautiful Smile</h2>
+        </header>
+        <figure class="polaroid pol-anim">
+          <span class="tape"></span>
+          <img src="photo2.jpg" alt="Joja and me smiling together under a bright blue sky" loading="lazy" decoding="async">
+          <figcaption>that smile ♡</figcaption>
+        </figure>
+        <p class="msg" dir="rtl" lang="ar" data-msg="smile"></p>
+        <div class="controls">
+          <button class="btn ghost skip-btn" type="button" aria-label="Skip animation">Skip Animation</button>
+          <div class="cont"><span class="cap">♡ Next little moment ♡</span><button class="btn continue-btn" type="button" disabled>Continue ❤️</button></div>
+        </div>
+      </div>
+    </section>
+
+                 <!-- ============ SCENE 6 — MY SWEET GIRL ============ -->
+    <section class="scene" id="s6" aria-label="My Sweet Girl">
+      <div class="local-hearts" aria-hidden="true"></div>
+      <div class="wrap">
+        <header>
+          <p class="kicker">Chapter two</p>
+          <h2 class="title script">My Sweet Girl</h2>
+        </header>
+        <div class="sweet-grid">
+          <figure class="sweet-photo pol-anim" style="--rot:2.5deg">
+            <svg class="deco sway" style="--s:50px;--c:#f6a5bd;left:-20px;top:-18px;z-index:3" aria-hidden="true"><use href="#i-flower"/></svg>
+            <svg class="deco sway" style="--s:34px;--c:#ffcfae;left:20px;top:-22px;z-index:3;--dl:-2s" aria-hidden="true"><use href="#i-flower"/></svg>
+            <svg class="deco heart" style="--s:36px;--c:#e86f95;right:-14px;bottom:-12px;z-index:3;transform:rotate(14deg)" aria-hidden="true"><use href="#i-heart"/></svg>
+            <img src="photo3.jpg" alt="Joja and me with a big bouquet of red roses" loading="lazy" decoding="async">
+          </figure>
+          <div class="pink-card">
+            <svg class="deco sway" style="--s:42px;--c:#fff;right:-12px;top:-16px;z-index:3" aria-hidden="true"><use href="#i-flower"/></svg>
+            <svg class="deco heart" style="--s:30px;--c:#fff;left:-10px;bottom:-12px;z-index:3;transform:rotate(-14deg)" aria-hidden="true"><use href="#i-heart"/></svg>
+            <svg class="deco spark" style="--s:20px;left:18px;top:14px" aria-hidden="true"><use href="#i-spark"/></svg>
+            <p class="msg" dir="rtl" lang="ar" data-msg="sweet"></p>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="btn ghost skip-btn" type="button" aria-label="Skip animation">Skip Animation</button>
+          <div class="cont"><span class="cap">♡ Next little moment ♡</span><button class="btn continue-btn" type="button" disabled>Continue ❤️</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCENE 7 — THE BEST THING ============ -->
+    <section class="scene" id="s7" aria-label="The Best Thing That Happened to Me" data-parallax>
+      <div class="px" style="--d:-18"><div class="typo-glow" style="opacity:.7"></div></div>
+      <div class="local-hearts" aria-hidden="true"></div>
+      <div class="wrap">
+        <header>
+          <p class="kicker">Chapter three</p>
+          <h2 class="best-title">The Best Thing That Happened to Me</h2>
+        </header>
+        <figure class="best-photo" style="margin-left:0;margin-right:0">
+          <img src="photo4.jpg" alt="Joja and me close together, smiling, seen from below against the sky" loading="lazy" decoding="async">
+        </figure>
+        <p class="msg best-msg" dir="rtl" lang="ar" data-msg="best"></p>
+        <div class="controls">
+          <button class="btn ghost skip-btn" type="button" aria-label="Skip animation">Skip Animation</button>
+          <div class="cont"><span class="cap">♡ Next little moment ♡</span><button class="btn continue-btn" type="button" disabled>Continue ❤️</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCENE 8 — ALEXANDRIA ============ -->
+    <section class="scene" id="s8" aria-label="Alexandria — A Memory to Keep">
+      <div class="local-hearts" aria-hidden="true"></div>
+      <div class="wrap">
+        <header>
+          <p class="kicker">Chapter four</p>
+          <h2 class="alex-title">Alexandria — A Memory to Keep</h2>
+        </header>
+        <div class="alex-grid">
+          <figure class="mem-frame pol-anim" style="--rot:-2deg;margin:0">
+            <svg class="corner" style="left:-8px;top:-8px" viewBox="0 0 32 29" aria-hidden="true"><use href="#i-heart"/></svg>
+            <svg class="corner" style="right:-8px;top:-8px" viewBox="0 0 32 29" aria-hidden="true"><use href="#i-heart"/></svg>
+            <svg class="corner" style="left:-8px;bottom:-8px" viewBox="0 0 32 29" aria-hidden="true"><use href="#i-heart"/></svg>
+            <svg class="corner" style="right:-8px;bottom:-8px" viewBox="0 0 32 29" aria-hidden="true"><use href="#i-heart"/></svg>
+            <div class="mem-mat">
+              <img src="photo5.jpg" alt="Joja and me leaning on each other under a tree in Alexandria" loading="lazy" decoding="async">
+              <figcaption>Alexandria</figcaption>
+            </div>
+          </figure>
+          <div class="letter">
+            <span class="postmark">Alexandria</span>
+            <svg class="deco sway" style="--s:40px;--c:#f6a5bd;right:12px;top:10px" aria-hidden="true"><use href="#i-flower"/></svg>
+            <p class="msg" dir="rtl" lang="ar" data-msg="alex"></p>
+            <svg class="seal" viewBox="0 0 32 29" aria-hidden="true"><use href="#i-heart"/></svg>
+          </div>
+        </div>
+        <div class="controls" style="margin-top:12px">
+          <button class="btn ghost skip-btn" type="button" aria-label="Skip animation">Skip Animation</button>
+          <div class="cont"><span class="cap">♡ Next little moment ♡</span><button class="btn continue-btn" type="button" disabled>Continue ❤️</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCENE 9 — FINAL ============ -->
+    <section class="scene" id="s9" aria-label="Final love scene" data-parallax>
+      <div class="px" style="--d:-22"><div class="big-glow a"></div></div>
+      <div class="px" style="--d:16"><div class="big-glow b"></div><div class="big-glow c"></div></div>
+      <div class="local-hearts" aria-hidden="true"></div>
+      <svg class="deco spark" style="--s:26px;left:12%;top:18%" aria-hidden="true"><use href="#i-spark"/></svg>
+      <svg class="deco spark" style="--s:18px;right:14%;top:24%;--dl:-1s" aria-hidden="true"><use href="#i-spark"/></svg>
+      <svg class="deco spark" style="--s:22px;left:20%;bottom:22%;--dl:-2s" aria-hidden="true"><use href="#i-spark"/></svg>
+      <svg class="deco spark" style="--s:30px;right:18%;bottom:26%;--dl:-.5s" aria-hidden="true"><use href="#i-spark"/></svg>
+      <svg class="deco spark" style="--s:16px;left:50%;top:12%;--dl:-1.7s" aria-hidden="true"><use href="#i-spark"/></svg>
+      <div class="wrap final" id="final">
+        <p class="final-kicker">Happy Valentine's Day, Joja</p>
+        <h2 class="final-name" id="final-name" aria-label="𝓑𝓪𝓽𝓪𝓽𝓪🌼💕">𝓑𝓪𝓽𝓪𝓽𝓪🌼💕</h2>
+        <div class="divider" aria-hidden="true"><svg viewBox="0 0 32 29"><use href="#i-heart"/></svg></div>
+        <p class="final-sub">With all my love, always ❤️</p>
+        <button class="btn ghost" id="replay" type="button">Watch again ↺</button>
+      </div>
+    </section>
+  </main>
+
+  <button id="music-btn" type="button" aria-pressed="false" aria-label="Play music" title="Play music">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.500z"/></svg>
+    <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+  </button>
+  <div id="toast" role="status" aria-live="polite"></div>
+</div>
+
+<!-- =====================================================================
+     MODULE 1 — animations.js (shared utilities)
+     ===================================================================== -->
+<script>
+(function () {
+  'use strict';
+  var J = window.Joja = window.Joja || {};
+  var NS = 'http://www.w3.org/2000/svg';
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var HEART_COLORS = ['#f7b6c9', '#f08fae', '#ffd1dc', '#fff2f6', '#e86f95', '#f9c6d4', '#dcc9f3', '#ffcfae'];
+
+  function rand(a, b) { return Math.random() * (b - a) + a; }
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function T(ms) { return reduced ? ms * 0.4 : ms; }
+
+  /* Timeline: a cancellable group of timeouts */
+  function Timeline() { this.ids = []; }
+  Timeline.prototype.at = function (ms, fn) {
+    var self = this;
+    var id = setTimeout(function () {
+      var i = self.ids.indexOf(id);
+      if (i > -1) self.ids.splice(i, 1);
+      fn();
+    }, ms);
+    this.ids.push(id);
+    return id;
+  };
+  Timeline.prototype.clear = function () {
+    this.ids.forEach(clearTimeout);
+    this.ids = [];
+  };
+
+  /* Reveal a list of units one after another; returns { skip, cancel } */
+  function reveal(root, units, onDone) {
+    var tl = new Timeline();
+    var done = false;
+    var t = 0;
+    units.forEach(function (u) {
+      tl.at(t, function () { u.el.classList.add('is-in'); });
+      t += T(u.wait);
+    });
+    tl.at(t + T(450), finish);
+    function finish() {
+      if (done) return;
+      done = true;
+      tl.clear();
+      onDone();
+    }
+    return {
+      skip: function () {
+        if (done) return;
+        tl.clear();
+        root.classList.add('is-skip');
+        units.forEach(function (u) { u.el.classList.add('is-in'); });
+        tl.at(400, finish);
+      },
+      cancel: function () { done = true; tl.clear(); }
+    };
+  }
+
+  /* Hearts */
+  function createHeart(o) {
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 32 29');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('class', 'fh');
+    var use = document.createElementNS(NS, 'use');
+    use.setAttribute('href', '#i-heart');
+    svg.appendChild(use);
+    var size = rand(o.min, o.max);
+    var depth = (size - o.min) / Math.max(1, o.max - o.min);
+    var st = svg.style;
+    st.width = size.toFixed(1) + 'px';
+    st.height = (size * 0.9).toFixed(1) + 'px';
+    st.left = rand(0, 96).toFixed(1) + '%';
+    st.color = pick(HEART_COLORS);
+    st.setProperty('--o', rand(0.28, 0.72).toFixed(2));
+    st.setProperty('--dx', rand(-130, 130).toFixed(0) + 'px');
+    st.setProperty('--r0', rand(-30, 30).toFixed(0) + 'deg');
+    st.setProperty('--r1', rand(-70, 70).toFixed(0) + 'deg');
+    if (o.rise) st.setProperty('--rise', o.rise);
+    var dur = o.dMax - depth * (o.dMax - o.dMin) * 0.55 + rand(0, 3);
+    st.animationDuration = dur.toFixed(1) + 's';
+    st.animationDelay = (-rand(0, dur)).toFixed(1) + 's';
+    return svg;
+  }
+  var hearts = {
+    spawn: function (container, count, opts) {
+      if (!container || reduced) return;
+      var o = Object.assign({ min: 12, max: 30, dMin: 8, dMax: 15 }, opts || {});
+      var frag = document.createDocumentFragment();
+      for (var i = 0; i < count; i++) frag.appendChild(createHeart(o));
+      container.appendChild(frag);
+    },
+    clear: function (container) {
+      if (container) while (container.firstChild) container.removeChild(container.firstChild);
+    }
+  };
+
+   /* Pointer parallax for elements using .px */
+  function parallax(el) {
+    if (reduced) return function () {};
+    var raf = 0, mx = 0, my = 0;
+    function apply() {
+      raf = 0;
+      el.style.setProperty('--mx', mx.toFixed(3));
+      el.style.setProperty('--my', my.toFixed(3));
+    }
+    function onMove(e) {
+      mx = (e.clientX / window.innerWidth - 0.5) * 2;
+      my = (e.clientY / window.innerHeight - 0.5) * 2;
+      if (!raf) raf = requestAnimationFrame(apply);
+    }
+    window.addEventListener('pointermove', onMove, { passive: true });
+    return function dispose() {
+      window.removeEventListener('pointermove', onMove);
+      if (raf) cancelAnimationFrame(raf);
+      el.style.removeProperty('--mx');
+      el.style.removeProperty('--my');
+    };
+  }
+
+  var toastTimer = 0;
+  function toast(msg) {
+    var el = document.getElementById('toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('show'); }, 4500);
+  }
+
+  J.Anim = { Timeline: Timeline, reveal: reveal, hearts: hearts, parallax: parallax, toast: toast, T: T, reduced: reduced, rand: rand };
+})();
+</script>
+
+<!-- =====================================================================
+     MODULE 2 — music.js
+     ===================================================================== -->
+<script>
+(function () {
+  'use strict';
+  var J = window.Joja;
+  var SRC = 'wala-asha-wala-kan.mp3';
+  var audio = null;
+  var available = true;
+  var btn = document.getElementById('music-btn');
+
+  function setUI() {
+    var playing = !!audio && !audio.paused && !audio.ended;
+    btn.classList.toggle('is-playing', playing);
+    btn.classList.toggle('unavailable', !available);
+    btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    var label = !available ? 'Music unavailable' : (playing ? 'Pause music' : 'Play music');
+    btn.setAttribute('aria-label', label);
+    btn.title = label;
+  }
+
+  function markUnavailable() {
+    if (!available) return;
+    available = false;
+    setUI();
+    J.Anim.toast('Music file not found — add it at audio/wala-asha-wala-kan.mp3');
+  }
+
+  function ensure() {
+    if (audio) return audio;
+    audio = new Audio();
+    audio.preload = 'auto';
+    audio.loop = true;
+    audio.volume = 0.85;
+    audio.addEventListener('error', markUnavailable);
+    audio.addEventListener('play', setUI);
+    audio.addEventListener('pause', setUI);
+    audio.src = SRC;
+    return audio;
+  }
+
+  function start() {
+    if (!available) { J.Anim.toast('Music file not found — add it at audio/wala-asha-wala-kan.mp3'); return; }
+    var p = ensure().play();
+    if (p && p.catch) {
+      p.catch(function (err) {
+        if (err && (err.name === 'NotSupportedError')) markUnavailable();
+      });
+    }
+  }
+
+  function toggle() {
+    if (!audio) { start(); return; }
+    if (!available) { J.Anim.toast('Music file not found — add it at audio/wala-asha-wala-kan.mp3'); return; }
+    if (audio.paused) start(); else audio.pause();
+  }
+
+  btn.addEventListener('click', toggle);
+  setUI();
+  J.music = { start: start, toggle: toggle };
+})();
+</script>
+
+<!-- =====================================================================
+     MODULE 3 — scenes.js (scene manager + scene logic)
+     ===================================================================== -->
+<script>
+(function () {
+  'use strict';
+  var J = window.Joja;
+  var A = J.Anim, T = A.T, Timeline = A.Timeline;
+  var $ = function (id) { return document.getElementById(id); };
+  var backdrops = Array.prototype.slice.call(document.querySelectorAll('.bd'));
+
+  /* ---------- Exact message data ---------- */
+  var MESSAGES = {
+    smile: 'لو هنتكلم عل احلي حاجه فيكي ف هي ضحكتك الي بتنورلي حياتي ويحاول دايما اخليه موجوده عل قد م اقدر وضحكتك هي الي بتنورلي حياتي ❤️❤️❤️❤️💋💋',
+    sweet: ['اكتر حاجه بحبها في شخصيتك', 'هي دلعك عليا', 'وان انتي دلوعه', 'وبحب جدا', 'لما بتدلعي عليا ف الشات', 'أو لما بنتقابل', 'عشان انتي احلي دلوعه', '💕💕❤️'],
+    best: ['وجودك ف حياتي مخليني قادر اعيش', 'وعايز اقولك أن انتي اخلي صدفه حصلتلي ف حياتي', 'وان احلي وقت هو الوقت الي بقضيه معاكي', 'والوقت الي جاي كمان', '😍❤️❤️❤️❤️💋'],
+    alex: [
+      ['اخلي ذكري بالنسبالي هي نزوله اسكندريه الي كانت كلها حب ودلع واهتمام'],
+      ['وعمري م هنسي', { em: 'نظرتك ليا وانتي نايمه علي كتفي' }, 'دي عندي بالدنيا'],
+      ['وعمري م هنساه ابدا'],
+      ['وهفضل احكيه لاحفادنا واولادنا أن شاء الله'],
+      ['❤️❤️❤️💕💓💓']
+    ]
+  };
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  /* ---------- Message builders (text only, no HTML injection) ---------- */
+  function buildWords(box) {
+    var words = MESSAGES.smile.split(' ');
+    return words.map(function (w, i) {
+      var s = el('span', 'unit u-word', w);
+      box.appendChild(s);
+      if (i < words.length - 1) box.appendChild(document.createTextNode(' '));
+      return { el: s, wait: i === words.length - 1 ? 300 : 170 };
+    });
+  }
+  function buildPhrases(box) {
+    var list = MESSAGES.sweet;
+    return list.map(function (p, i) {
+      var s = el('span', 'unit u-phrase', p);
+      box.appendChild(s);
+      if (i < list.length - 1) box.appendChild(document.createTextNode(' '));
+      return { el: s, wait: 640 };
+    });
+  }
+  function buildLines(box) {
+    return MESSAGES.best.map(function (l) {
+      var p = el('span', 'unit u-line', l);
+      box.appendChild(p);
+      return { el: p, wait: 950 };
+    });
+  }
+  function buildSentences(box) {
+    var units = [];
+    MESSAGES.alex.forEach(function (parts, idx) {
+      var last = idx === MESSAGES.alex.length - 1;
+      if (parts.length === 1) {
+        var s = el('span', 'unit u-sent', parts[0]);
+        box.appendChild(s);
+        units.push({ el: s, wait: last ? 500 : 1250 });
+      } else {
+        var row = el('span', 'u-row');
+        row.style.display = 'block';
+        row.style.marginBottom = '.3em';
+        parts.forEach(function (part, i) {
+          var isEm = typeof part === 'object';
+          var span = el('span', 'unit u-part' + (isEm ? ' em' : ''), isEm ? part.em : part);
+          row.appendChild(span);
+          if (i < parts.length - 1) row.appendChild(document.createTextNode(' '));
+          units.push({ el: span, wait: isEm ? 1700 : (i === 0 ? 800 : 1150) });
+        });
+        box.appendChild(row);
+      }
+    });
+    return units;
+  }
+
+  /* ---------- Scene manager ---------- */
+  var scenes = [];
+  var current = -1;
+  var busy = false;
+  var disposeParallax = null;
+  var TRANSITION = 1150;
+
+  function go(index) {
+    if (busy || index === current || !scenes[index]) return;
+    busy = true;
+    var prevIndex = current;
+    var prev = scenes[prevIndex];
+    var next = scenes[index];
+
+      if (prev) {
+      prev.root.classList.remove('active');
+      prev.root.classList.add('leaving');
+      backdrops[prevIndex].classList.remove('on');
+    }
+    if (disposeParallax) { disposeParallax(); disposeParallax = null; }
+    backdrops[index].classList.add('on');
+    next.root.scrollTop = 0;
+    current = index;
+
+    requestAnimationFrame(function () {
+      next.root.classList.add('active');
+      if (next.root.hasAttribute('data-parallax')) disposeParallax = A.parallax(next.root);
+      next.enter();
+    });
+
+    setTimeout(function () {
+      if (prev) {
+        prev.root.classList.remove('leaving');
+        prev.exit();
+      }
+      busy = false;
+    }, T(TRANSITION));
+  }
+
+  function localHearts(root, count, opts) {
+    var box = root.querySelector('.local-hearts');
+    A.hearts.spawn(box, count, opts);
+    return box;
+  }
+  function clearLocalHearts(root) { A.hearts.clear(root.querySelector('.local-hearts')); }
+
+  /* ---------- Scene 1: Countdown ---------- */
+  function countdownScene() {
+    var root = $('s1'), gate = $('gate'), count = $('count'), num = $('count-num');
+    var tl = new Timeline();
+    var started = false;
+
+    function tick(n) {
+      num.textContent = String(n);
+      num.classList.remove('tick');
+      void num.offsetWidth;
+      num.classList.add('tick');
+    }
+    function run() {
+      started = true;
+      gate.classList.add('gone');
+      count.classList.add('on');
+      var step = T(1250), t0 = T(600);
+      [3, 2, 1].forEach(function (n, i) { tl.at(t0 + i * step, function () { tick(n); }); });
+      tl.at(t0 + 3 * step + T(150), function () { go(1); });
+    }
+    $('begin-music').addEventListener('click', function () { J.music.start(); run(); });
+    $('begin-silent').addEventListener('click', run);
+
+    return {
+      root: root,
+      enter: function () { if (started) run(); },
+      exit: function () {
+        tl.clear();
+        count.classList.remove('on');
+        num.classList.remove('tick');
+        num.textContent = '';
+        if (!started) gate.classList.remove('gone');
+        else gate.classList.add('gone');
+      }
+    };
+  }
+
+  /* ---------- Scene 2: Opening typography ---------- */
+  function typographyScene() {
+    var root = $('s2');
+    var words = Array.prototype.slice.call(root.querySelectorAll('.hw'));
+    var tl = new Timeline();
+    return {
+      root: root,
+      enter: function () {
+        localHearts(root, A.reduced ? 0 : 6, { min: 14, max: 30, dMin: 9, dMax: 15 });
+        words.forEach(function (w, i) {
+          tl.at(T(800) + i * T(1000), function () { w.classList.add('in'); });
+        });
+        tl.at(T(800) + 4 * T(1000) + T(2600), function () { go(2); });
+      },
+      exit: function () {
+        tl.clear();
+        words.forEach(function (w) { w.classList.remove('in'); });
+        clearLocalHearts(root);
+      }
+    };
+  }
+
+  /* ---------- Scene 3: Cat & guitar ---------- */
+  function catScene() {
+    var root = $('s3'), cta = $('cat-cta');
+    var tl = new Timeline();
+    $('to-scrapbook').addEventListener('click', function () { go(3); });
+    return {
+      root: root,
+      enter: function () {
+        localHearts(root, 8, { min: 14, max: 30, dMin: 8, dMax: 14 });
+        tl.at(T(3200), function () { cta.classList.add('show'); });
+      },
+      exit: function () { tl.clear(); cta.classList.remove('show'); clearLocalHearts(root); }
+    };
+  }
+
+  /* ---------- Scene 4: Scrapbook ---------- */
+  function scrapbookScene() {
+    var root = $('s4'), book = $('book'), cover = $('cover'), closeBtn = $('close-book');
+    var tl = new Timeline();
+    var state = 'closed';
+
+    cover.addEventListener('click', function () {
+      if (state !== 'closed') return;
+      state = 'opening';
+      cover.setAttribute('aria-expanded', 'true');
+      book.classList.add('opening');
+      tl.at(T(700), function () {
+        book.classList.remove('opening');
+        book.classList.add('open');
+        state = 'open';
+        closeBtn.focus({ preventScroll: true });
+      });
+    });
+    closeBtn.addEventListener('click', function () {
+      if (state !== 'open') return;
+      state = 'closing';
+      book.classList.add('closing');
+      tl.at(T(750), function () { go(4); });
+    });
+
+    return {
+      root: root,
+      enter: function () { localHearts(root, 6, { min: 12, max: 26, dMin: 10, dMax: 17 }); },
+      exit: function () {
+        tl.clear();
+        book.classList.remove('opening', 'open', 'closing');
+        cover.setAttribute('aria-expanded', 'false');
+        state = 'closed';
+        clearLocalHearts(root);
+      }
+    };
+  }
+
+  /* ---------- Scenes 5–8: message reveals ---------- */
+  function messageScene(id, nextIndex, build, heartOpts, heartCount) {
+    var root = $(id);
+    var box = root.querySelector('.msg');
+    var controls = root.querySelector('.controls');
+    var skip = root.querySelector('.skip-btn');
+    var cont = root.querySelector('.continue-btn');
+    var units = build(box);
+    var ctrl = null;
+    var tl = new Timeline();
+
+    skip.addEventListener('click', function () { if (ctrl) ctrl.skip(); });
+    cont.addEventListener('click', function () {
+      if (!controls.classList.contains('done')) return;
+      cont.disabled = true;
+      go(nextIndex);
+    });
+
+    function reset() {
+      units.forEach(function (u) { u.el.classList.remove('is-in'); });
+      box.classList.remove('is-skip');
+      controls.classList.remove('done');
+      cont.disabled = true;
+    }
+
+    return {
+      root: root,
+      enter: function () {
+        reset();
+        localHearts(root, heartCount, heartOpts);
+        tl.at(T(1100), function () {
+          ctrl = A.reveal(box, units, function () {
+            controls.classList.add('done');
+            cont.disabled = false;
+          });
+        });
+      },
+      exit: function () {
+        tl.clear();
+        if (ctrl) ctrl.cancel();
+        ctrl = null;
+        reset();
+        clearLocalHearts(root);
+      }
+    };
+  }
+
+  /* ---------- Scene 9: Final ---------- */
+  function finalScene() {
+    var root = $('s9'), wrap = $('final'), name = $('final-name');
+    var tl = new Timeline();
+    var chars = Array.from(name.textContent);
+    name.textContent = '';
+    chars.forEach(function (c, i) {
+      var cp = c.codePointAt(0);
+      var isMath = cp >= 0x1D400 && cp <= 0x1D7FF;
+      var s = el('span', 'ch' + (isMath ? ' math' : ''), c);
+      s.setAttribute('aria-hidden', 'true');
+      s.style.setProperty('--i', String(i));
+      name.appendChild(s);
+    });
+    $('replay').addEventListener('click', function () { go(0); });
+
+    return {
+      root: root,
+      enter: function () {
+        localHearts(root, 12, { min: 14, max: 38, dMin: 9, dMax: 18 });
+        tl.at(T(500), function () { wrap.classList.add('show'); });
+      },
+      exit: function () { tl.clear(); wrap.classList.remove('show'); clearLocalHearts(root); }
+    };
+  }
+
+  /* ---------- Assemble in the exact required order ---------- */
+  var soft = { min: 12, max: 26, dMin: 10, dMax: 17 };
+  var scene5 = messageScene('s5', 5, buildWords, soft, 7);
+  var scene6 = messageScene('s6', 6, buildPhrases, soft, 7);
+  var scene7 = messageScene('s7', 7, buildLines, { min: 12, max: 30, dMin: 11, dMax: 18 }, 7);
+  var scene8 = messageScene('s8', 8, buildSentences, { min: 10, max: 22, dMin: 12, dMax: 20 }, 5);
+
+  scenes = [
+    countdownScene(),   // 1 Cinematic Countdown
+    typographyScene(),  // 2 Opening Typography
+    catScene(),         // 3 Cat & Guitar
+    scrapbookScene(),   // 4 Interactive Scrapbook
+    scene5,             // 5 Your Beautiful Smile
+    scene6,             // 6 My Sweet Girl
+    scene7,             // 7 The Best Thing That Happened to Me
+    scene8,             // 8 Alexandria — A Memory to Keep
+    finalScene()        // 9 Final Love Scene
+  ];
+
+  J.go = go;
+})();
+</script>
+
+<!-- =====================================================================
+     MODULE 4 — main.js (bootstrap)
+     ===================================================================== -->
+<script>
+(function () {
+  'use strict';
+  var J = window.Joja;
+
+  /* Graceful placeholders for missing photos */
+  function guardImage(img) {
+    function swap() {
+      if (img.dataset.failed) return;
+      img.dataset.failed = '1';
+      var ph = document.createElement('div');
+      ph.className = 'photo-missing';
+      ph.setAttribute('role', 'img');
+      ph.setAttribute('aria-label', img.alt + ' (photo missing)');
+      var a = document.createElement('span');
+      a.textContent = 'Missing photo ♡';
+      var b = document.createElement('strong');
+      b.textContent = img.getAttribute('src');
+      ph.appendChild(a);
+      ph.appendChild(b);
+      img.replaceWith(ph);
+    }
+    img.addEventListener('error', swap, { once: true });
+    if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) swap();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.scene img'), guardImage);
+
+  /* Ambient floating hearts (fewer on phones) */
+  var isPhone = window.matchMedia('(max-width: 700px)').matches;
+  J.Anim.hearts.spawn(document.getElementById('hearts-layer'), isPhone ? 9 : 16, { min: 10, max: 46, dMin: 14, dMax: 28 });
+
+  /* Begin */
+  J.go(0);
+})();
+</script>
+</body>
+</html>
